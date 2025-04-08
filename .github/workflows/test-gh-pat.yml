@@ -1,0 +1,29 @@
+name: Test GH_PAT Token
+
+on:
+  workflow_dispatch:  # يسمح لك بتشغيله يدويًا من واجهة GitHub
+
+jobs:
+  test-gh-pat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print GH_PAT info (obfuscated)
+        run: |
+          echo "First 4 chars of token: ${GH_PAT:0:4}****"
+          echo "Last 4 chars of token: ****${GH_PAT: -4}"
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+
+      - name: Try curl to GitHub API
+        run: |
+          echo "Testing GH_PAT with curl..."
+          curl -v -H "Authorization: token $GH_PAT" https://api.github.com/user
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+
+      - name: Try gh auth login
+        run: |
+          echo "$GH_PAT" | gh auth login --with-token
+          gh auth status
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
