@@ -1,7 +1,0 @@
-- name: Debug GH_PAT value
-  run: |
-    echo "First 4: ${GH_PAT:0:4}****"
-    echo "Last 4: ****${GH_PAT: -4}"
-  env:
-    GH_PAT: ${{ secrets.GH_PAT }}
-
